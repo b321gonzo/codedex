@@ -1,0 +1,61 @@
+from random import randint
+def gaps(container, n):
+    for i in range(n):
+        container.append(-1)
+    return container
+
+def select_number(nomore):
+    num = randint(0, 999)
+    while num in nomore:
+        num = randint(0, 999)
+    print("You got a:", num)
+    nomore.append(num)
+    return num, nomore
+
+def choices(num, l):
+    possible_choices = []
+    aux = 0
+    pos = 0
+    while aux < len(l) and num > l[aux]:
+        possible_choices.append(aux + 1)
+        aux += 1
+    for i in range(len(l)): 
+        if l[i] != -1 and l[i] < num:
+            pos = i
+    for i in range(pos):
+        possible_choices.pop(0)
+    for i in possible_choices:
+        if l[i - 1] != -1:
+            possible_choices.remove(i)
+    return possible_choices
+
+def play(f, nomore):
+    num, nomore = select_number(nomore)
+    where = choices(num, f)
+    if len(where) == 0:
+        return f, nomore, False
+    else:
+        choice = int(input("In which position would you like to enter the number? "))
+        while choice not in where:
+            choice = int(input("Invalid position, please enter a valid position: "))
+        f[choice - 1] = num
+        return f, nomore, True
+
+def show(f):
+    for i in range(len(f)):
+        if f[i] == -1:
+            print(str(i + 1) + ("."))
+        else:
+            print(str(i + 1) + ("."), f[i])
+
+fill = gaps([], 20)
+already_got = []
+bol = True
+while -1 in fill and bol:
+    show(fill)
+    fill, already_got, bol = play(fill, already_got)
+    print("\n" * 20)
+if bol: 
+    print("WOW, You Win.")
+else:
+    print("You lose, try again.")
