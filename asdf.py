@@ -1,4 +1,3 @@
-#asdf.py
 class Test:
     def __init__(self, name, is_caught=False):
         self.name = name
